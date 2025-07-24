@@ -1,0 +1,36 @@
+1. Create Collection Order
+
+bash
+Copy
+Edit
+curl -X POST http://localhost:3000/collection -H "Content-Type: application/json" -d '{
+  "amount": "100.00",
+  "orderId": "COL123",
+  "notifyUrl": "https://yourdomain.com/callback"
+}'
+2. Create Payment Order
+
+bash
+Copy
+Edit
+curl -X POST http://localhost:3000/payment -H "Content-Type: application/json" -d '{
+  "amount": "50.00",
+  "orderId": "PAY123",
+  "notifyUrl": "https://yourdomain.com/callback",
+  "bankAccount": "1234567890",
+  "customName": "John Doe"
+}'
+3. Query Order
+
+bash
+Copy
+Edit
+curl -X POST http://localhost:3000/query -H "Content-Type: application/json" -d '{
+  "orderId": "PAY123"
+}'
+4. Check Balance
+
+bash
+Copy
+Edit
+curl -X POST http://localhost:3000/balance

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment API Tester</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    h2 { color: #333; }
+    section { margin-bottom: 30px; padding: 15px; border: 1px solid #ccc; }
+    label { display: block; margin-top: 10px; }
+    input, textarea { width: 100%; padding: 8px; margin-top: 5px; }
+    button { margin-top: 10px; padding: 10px 20px; }
+    pre { background: #f4f4f4; padding: 10px; overflow-x: auto; }
+  </style>
+</head>
+<body>
+
+<h1>🧪 Payment API Tester</h1>
+
+<section>
+  <h2>1. Create Collection Order</h2>
+  <label>Order ID <input id="collOrderId" /></label>
+  <label>Amount <input id="collAmount" /></label>
+  <label>Notify URL <input id="collNotify" value="https://yourdomain.com/callback" /></label>
+  <button onclick="callApi('collection')">Create Collection</button>
+  <pre id="collectionResult"></pre>
+</section>
+
+<section>
+  <h2>2. Create Payment Order</h2>
+  <label>Order ID <input id="payOrderId" /></label>
+  <label>Amount <input id="payAmount" /></label>
+  <label>Bank Account <input id="payBank" /></label>
+  <label>Custom Name <input id="payName" /></label>
+  <label>Notify URL <input id="payNotify" value="https://yourdomain.com/callback" /></label>
+  <button onclick="callApi('payment')">Create Payment</button>
+  <pre id="paymentResult"></pre>
+</section>
+
+<section>
+  <h2>3. Query Order</h2>
+  <label>Order ID <input id="queryOrderId" /></label>
+  <button onclick="callApi('query')">Query</button>
+  <pre id="queryResult"></pre>
+</section>
+
+<section>
+  <h2>4. Check Balance</h2>
+  <button onclick="callApi('balance')">Check Balance</button>
+  <pre id="balanceResult"></pre>
+</section>
+
+<script>
+  async function callApi(type) {
+    let url = '/' + type;
+    let body = {};
+    if (type === 'collection') {
+      body = {
+        orderId: document.getElementById('collOrderId').value,
+        amount: document.getElementById('collAmount').value,
+        notifyUrl: document.getElementById('collNotify').value
+      };
+    } else if (type === 'payment') {
+      body = {
+        orderId: document.getElementById('payOrderId').value,
+        amount: document.getElementById('payAmount').value,
+        bankAccount: document.getElementById('payBank').value,
+        customName: document.getElementById('payName').value,
+        notifyUrl: document.getElementById('payNotify').value
+      };
+    } else if (type === 'query') {
+      body = {
+        orderId: document.getElementById('queryOrderId').value
+      };
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      const data = await response.json();
+      document.getElementById(type + 'Result').innerText = JSON.stringify(data, null, 2);
+    } catch (err) {
+      document.getElementById(type + 'Result').innerText = '❌ Error: ' + err.message;
+    }
+  }
+</script>
+
+</body>
+</html>
